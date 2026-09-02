@@ -95,7 +95,7 @@ build brief / `lib/mascot.ts` for which pose appears on which screen.
 place (same filenames) when the real assets are ready. Keep the app icon
 text-free per the brand brief.
 
-## 3. Configuring RevenueCat + EAS Submit
+## 3. Configuring RevenueCat + Codemagic / EAS Submit
 
 ### RevenueCat (in-app purchase)
 
@@ -107,10 +107,13 @@ text-free per the brand brief.
 3. Create an **Entitlement** called `unlock_everything` (matches
    `ENTITLEMENT_ID` in `lib/purchases.ts`) and attach both store products to
    it.
-4. Copy the iOS and Android **public** API keys from RevenueCat and set them
-   as `extra.revenueCatApiKeyIOS` / `extra.revenueCatApiKeyAndroid` in
-   `app.json` (or inject them via an EAS Build environment variable /
-   `app.config.ts` if you'd rather not commit them).
+4. Copy the iOS and Android **public** API keys from RevenueCat and expose
+   them as `EXPO_PUBLIC_REVENUECAT_API_KEY_IOS` / `EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID`
+   wherever the app gets built — Metro inlines any `EXPO_PUBLIC_*` var at
+   build time. Locally that's a `.env` file (gitignored); on Codemagic that's
+   an environment variable group attached to the `expo-ios` workflow in
+   `codemagic.yaml` (see below) — RevenueCat's public SDK keys are safe to
+   ship client-side, but keep them out of git regardless.
 5. Rebuild a dev client (`npx expo prebuild && npx expo run:ios`) — once a
    key is present, `useEntitlement()` automatically switches from the local
    dev-unlock fallback to real RevenueCat purchases/restore.
@@ -118,7 +121,46 @@ text-free per the brand brief.
 If you rename the entitlement or offering, update `ENTITLEMENT_ID` /
 `OFFERING_ID` in `lib/purchases.ts` to match.
 
-### EAS Build + Submit
+### Codemagic (iOS builds — no Mac needed)
+
+`codemagic.yaml` at the repo root defines an `expo-ios` workflow that builds
+a real, signed iOS binary on Codemagic's cloud Macs and uploads it straight
+to TestFlight — this is how you get the app onto an iPhone without owning a
+Mac and without Expo Go (which can't load native modules like RevenueCat).
+
+What it does, in order: installs deps, runs `expo prebuild --platform ios
+--clean` to generate the native `ios/` project (gitignored — it's
+regenerated fresh on every build, never committed), stamps a unique build
+number, signs with the `codemagicFlutter` App Store Connect integration and
+the `Ios_signing` variable group, `pod install`s, builds the `.ipa` for the
+`Toddlerish` scheme, and submits it to TestFlight.
+
+Prerequisites (one-time, in App Store Connect / Codemagic — not code):
+
+- An app record for `com.toddlerish.app` already created in App Store
+  Connect (and the bundle id registered in the Apple Developer portal) —
+  `fetch-signing-files --create` makes certificates/profiles, not the app
+  record itself.
+- The `codemagicFlutter` App Store Connect integration and the
+  `Ios_signing` variable group (`APP_STORE_CONNECT_KEY_IDENTIFIER`,
+  `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_PRIVATE_KEY`,
+  `CERTIFICATE_PRIVATE_KEY_PASSWORD`) already exist in this Codemagic
+  team — reused from other apps, nothing Toddlerish-specific to set up there.
+- Once RevenueCat is configured, add an env var group (e.g. `RevenueCat`)
+  with `EXPO_PUBLIC_REVENUECAT_API_KEY_IOS` and uncomment its line under
+  `environment.groups` in `codemagic.yaml`.
+
+To run it: connect this repo in the Codemagic dashboard (if not already),
+then either push to trigger it (if a trigger is configured) or hit **Start
+new build** → `expo-ios`. The build shows up in TestFlight (under App Store
+Connect → TestFlight → Toddlerish) within a few minutes of the build
+finishing — install it via the TestFlight app on your iPhone.
+
+There's no Android workflow yet — ask and I'll add one; it's the faster path
+to "see it running" since it just needs an APK you sideload directly, no
+Apple account or TestFlight round-trip involved.
+
+### EAS Build + Submit (alternative, not currently wired up)
 
 1. `npm install -g eas-cli` (or use `npx eas-cli`), then `eas login`.
 2. `eas build:configure` to attach this project to an EAS project — this

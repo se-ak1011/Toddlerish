@@ -7,7 +7,6 @@
     "icon": "./assets/images/icon.png",
     "scheme": "toddlerish",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#F7F2EE",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.toddlerish.app"
@@ -42,8 +41,6 @@
       "typedRoutes": true
     },
     "extra": {
-      "revenueCatApiKeyIOS": "",
-      "revenueCatApiKeyAndroid": "",
       "eas": {
         "projectId": ""
       }
