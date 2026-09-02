@@ -27,8 +27,8 @@ export function Mascot({ pose, size = 96, style }: MascotProps) {
     <Image
       source={POSES[pose]}
       accessibilityIgnoresInvertColors
-      style={[{ width: size, height: size, borderRadius: size / 2 }, style]}
-      resizeMode="cover"
+      style={[{ width: size, height: size }, style]}
+      resizeMode="contain"
     />
   );
 }
