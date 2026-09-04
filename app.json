@@ -14,9 +14,8 @@
     "android": {
       "package": "com.toddlerish.app",
       "adaptiveIcon": {
-        "backgroundColor": "#F7F2EE",
+        "backgroundColor": "#E4D6E3",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false
