@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
@@ -16,6 +17,7 @@ const PERKS = [
 
 export default function PaywallScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { isUnlocked, purchase, restore, isStoreConfigured } = useEntitlement();
   const [isBusy, setIsBusy] = useState(false);
 
@@ -48,7 +50,12 @@ export default function PaywallScreen() {
   };
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={[
+        styles.content,
+        { paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + spacing.lg },
+      ]}>
       <View style={styles.top}>
         <Mascot pose="teddy" size={96} />
         <Text style={styles.title}>Unlock everything</Text>
@@ -84,7 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bg,
   },
   content: {
-    padding: spacing.xl,
+    paddingHorizontal: spacing.xl,
     gap: spacing.lg,
     alignItems: 'stretch',
   },

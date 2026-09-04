@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/Button';
 import { Mascot } from '@/components/Mascot';
@@ -10,6 +11,7 @@ const AGE_OPTIONS = ['Under 1', '1–2', '2–3', '3+'];
 
 export default function OnboardingScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { childAge, setChildAge, completeOnboarding } = useOnboarding();
 
   const finish = async () => {
@@ -22,7 +24,12 @@ export default function OnboardingScreen() {
   };
 
   return (
-    <View style={styles.screen}>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={[
+        styles.content,
+        { paddingTop: insets.top + spacing.xl, paddingBottom: insets.bottom + spacing.xl },
+      ]}>
       <Mascot pose="crawl" size={110} />
       <Text style={styles.title}>How old is your toddler?</Text>
       <Text style={styles.subtitle}>
@@ -49,7 +56,7 @@ export default function OnboardingScreen() {
         <Button label="Continue" onPress={finish} disabled={!childAge} />
         <Button label="Skip for now" onPress={finish} variant="secondary" />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -57,9 +64,12 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: colors.bg,
+  },
+  content: {
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: spacing.xl,
+    paddingHorizontal: spacing.xl,
     gap: spacing.md,
   },
   title: {

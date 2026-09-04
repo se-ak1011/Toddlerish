@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SymbolView } from 'expo-symbols';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Card } from '@/components/Card';
 import { ListRow } from '@/components/ListRow';
@@ -14,6 +15,7 @@ import { colors, spacing, type } from '@/theme';
 export default function TrickDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { isUnlocked } = useEntitlement();
   const { isTrickSaved, toggleTrickSaved } = useSaved();
 
@@ -38,7 +40,9 @@ export default function TrickDetailScreen() {
   };
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + spacing.xxl }]}>
       <Stack.Screen
         options={{
           title: trick.title,

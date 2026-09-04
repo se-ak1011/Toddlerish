@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SymbolView } from 'expo-symbols';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Card } from '@/components/Card';
 import { Chip } from '@/components/Chip';
@@ -16,6 +17,7 @@ import { colors, fonts, radii, spacing, type } from '@/theme';
 export default function BehaviourDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { isUnlocked } = useEntitlement();
   const { isBehaviourSaved, toggleBehaviourSaved } = useSaved();
 
@@ -40,7 +42,9 @@ export default function BehaviourDetailScreen() {
   };
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+    <ScrollView
+      style={styles.screen}
+      contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + spacing.xxl }]}>
       <Stack.Screen
         options={{
           title: behaviour.title,

@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Mascot } from '@/components/Mascot';
 import type { PoseKey } from '@/lib/mascot';
@@ -12,8 +13,9 @@ type ScreenHeaderProps = {
 };
 
 export function ScreenHeader({ title, subtitle, mascotPose, children }: ScreenHeaderProps) {
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, { paddingTop: insets.top + spacing.md }]}>
       <View style={styles.top}>
         <View style={styles.titleBlock}>
           <Text style={styles.title}>{title}</Text>
@@ -30,7 +32,6 @@ const styles = StyleSheet.create({
   wrap: {
     gap: spacing.md,
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
     paddingBottom: spacing.md,
   },
   top: {
