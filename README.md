@@ -113,10 +113,11 @@ text-free per the brand brief.
 4. Copy the iOS and Android **public** API keys from RevenueCat and expose
    them as `EXPO_PUBLIC_REVENUECAT_API_KEY_IOS` / `EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID`
    wherever the app gets built — Metro inlines any `EXPO_PUBLIC_*` var at
-   build time. Locally that's a `.env` file (gitignored); on Codemagic that's
-   an environment variable group attached to the `expo-ios` workflow in
-   `codemagic.yaml` (see below) — RevenueCat's public SDK keys are safe to
-   ship client-side, but keep them out of git regardless.
+   build time. The iOS key is already set directly in `environment.vars`
+   in `codemagic.yaml` (RevenueCat's public SDK keys are safe to ship
+   client-side, same category as a Stripe publishable key — that's why
+   it's committed rather than stored as a Codemagic secret). For local dev
+   builds, put it in a `.env` file (gitignored) instead.
 5. Rebuild a dev client (`npx expo prebuild && npx expo run:ios`) — once a
    key is present, `useEntitlement()` automatically switches from the local
    dev-unlock fallback to real RevenueCat purchases/restore.
@@ -149,9 +150,11 @@ Prerequisites (one-time, in App Store Connect / Codemagic — not code):
   `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_PRIVATE_KEY`,
   `CERTIFICATE_PRIVATE_KEY_PASSWORD`) already exist in this Codemagic
   team — reused from other apps, nothing Toddlerish-specific to set up there.
-- Once RevenueCat is configured, add an env var group (e.g. `RevenueCat`)
-  with `EXPO_PUBLIC_REVENUECAT_API_KEY_IOS` and uncomment its line under
-  `environment.groups` in `codemagic.yaml`.
+- `EXPO_PUBLIC_REVENUECAT_API_KEY_IOS` is already set directly in
+  `environment.vars` in `codemagic.yaml` — RevenueCat's public SDK key is
+  safe to commit (same category as a Stripe publishable key), so it lives
+  there rather than as a Codemagic secret. Rotate it in the RevenueCat
+  dashboard first, then update the value in `codemagic.yaml` to match.
 
 To run it: connect this repo in the Codemagic dashboard (if not already),
 then either push to trigger it (if a trigger is configured) or hit **Start
