@@ -166,6 +166,37 @@ There's no Android workflow yet — ask and I'll add one; it's the faster path
 to "see it running" since it just needs an APK you sideload directly, no
 Apple account or TestFlight round-trip involved.
 
+## 4. The Privacy Policy / Terms / Support site (`/docs`)
+
+`/docs` is a small static site — Privacy Policy, Terms of Use, Support/FAQ,
+and a marketing landing page — for the URLs App Store Connect requires at
+submission. It's plain HTML/CSS, styled with the app's own theme, no build
+step.
+
+**One-time setup (not done yet):** GitHub Pages needs to be turned on for
+this repo — that's a repo admin setting only doable from the GitHub UI, not
+something pushable via git. Go to **Settings → Pages** on
+`github.com/se-ak1011/Toddlerish`, under **Build and deployment** set
+**Source: Deploy from a branch**, branch **main** (or whichever the default
+branch is), folder **/docs**, then **Save**. GitHub builds it in a minute or
+two, after which these are live:
+
+- Privacy Policy: `https://se-ak1011.github.io/Toddlerish/privacy-policy.html`
+- Terms of Use: `https://se-ak1011.github.io/Toddlerish/terms-of-use.html`
+- Support: `https://se-ak1011.github.io/Toddlerish/support.html`
+- Marketing/landing page: `https://se-ak1011.github.io/Toddlerish/`
+
+Paste the first three into App Store Connect's **App Information** /
+**Version Information** pages (Privacy Policy URL, and Support URL are
+required; Marketing URL is optional). The same Privacy Policy and Terms
+URLs are also linked directly from the in-app paywall
+(`lib/webLinks.ts`) — update that file if the site ever moves.
+
+The Privacy Policy and Terms are drafted to accurately describe what this
+app actually does (nothing collected beyond local on-device storage, plus
+RevenueCat for purchase processing) — re-read them if you add anything that
+changes that (an account system, analytics, a new third-party SDK, etc.).
+
 ### EAS Build + Submit (alternative, not currently wired up)
 
 1. `npm install -g eas-cli` (or use `npx eas-cli`), then `eas login`.

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Linking, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/Button';
 import { Card } from '@/components/Card';
 import { Mascot } from '@/components/Mascot';
 import { useEntitlement } from '@/hooks/useEntitlement';
+import { PRIVACY_POLICY_URL, TERMS_OF_USE_URL } from '@/lib/webLinks';
 import { colors, spacing, type } from '@/theme';
 
 const PERKS = [
@@ -81,6 +82,16 @@ export default function PaywallScreen() {
       <Button label="Unlock everything" onPress={handlePurchase} disabled={isBusy} />
       <Button label="Restore purchases" onPress={handleRestore} variant="secondary" disabled={isBusy} />
       <Button label="Not right now" onPress={() => router.back()} variant="secondary" />
+
+      <View style={styles.legalRow}>
+        <Pressable onPress={() => Linking.openURL(PRIVACY_POLICY_URL)}>
+          <Text style={styles.legalLink}>Privacy Policy</Text>
+        </Pressable>
+        <Text style={styles.legalDivider}>·</Text>
+        <Pressable onPress={() => Linking.openURL(TERMS_OF_USE_URL)}>
+          <Text style={styles.legalLink}>Terms of Use</Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 }
@@ -120,5 +131,20 @@ const styles = StyleSheet.create({
     ...type.small,
     color: colors.textMuted,
     textAlign: 'center',
+  },
+  legalRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  legalLink: {
+    ...type.small,
+    color: colors.textMuted,
+    textDecorationLine: 'underline',
+  },
+  legalDivider: {
+    ...type.small,
+    color: colors.textMuted,
   },
 });
