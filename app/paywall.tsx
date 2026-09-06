@@ -79,7 +79,7 @@ export default function PaywallScreen() {
       ) : null}
 
       <Button label="Unlock everything" onPress={handlePurchase} disabled={isBusy} />
-      <Button label="Restore purchase" onPress={handleRestore} variant="secondary" disabled={isBusy} />
+      <Button label="Restore purchases" onPress={handleRestore} variant="secondary" disabled={isBusy} />
       <Button label="Not right now" onPress={() => router.back()} variant="secondary" />
     </ScrollView>
   );

@@ -9,7 +9,7 @@ type ChipProps = {
 
 const TONES = {
   plum: { bg: colors.plumTint, text: colors.primaryDeep },
-  calm: { bg: '#E7EEE8', text: '#4E5F50' },
+  calm: { bg: '#EDE6F0', text: colors.calm },
   headsUp: { bg: '#F5E9D6', text: '#7A5C2C' },
 } as const;
 

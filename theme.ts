@@ -14,7 +14,7 @@ export const colors = {
   textMuted: '#7E747C',
   onPrimary: '#FBF8F6',
   border: '#DCD3D0',
-  calm: '#9DB29F',
+  calm: '#3D2E45',
   headsUp: '#D8B27E',
 } as const;
 

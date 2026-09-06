@@ -14,8 +14,11 @@ export const REVENUECAT_API_KEYS = {
   android: process.env.EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID ?? '',
 };
 
-export const ENTITLEMENT_ID = 'unlock_everything';
-export const OFFERING_ID = 'default';
+// These two identifiers must match the RevenueCat dashboard exactly,
+// including case — RevenueCat entitlement and offering ids are
+// case-sensitive strings, not free-form labels.
+export const ENTITLEMENT_ID = 'Unlocked';
+export const OFFERING_ID = 'Toddlerish_unlock';
 
 export function getRevenueCatApiKey(): string | undefined {
   const key = Platform.select({ ios: REVENUECAT_API_KEYS.ios, android: REVENUECAT_API_KEYS.android });

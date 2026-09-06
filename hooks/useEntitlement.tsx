@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, type PropsWithChildren } from 'react';
 
-import { ENTITLEMENT_ID, getRevenueCatApiKey, isRevenueCatAvailable } from '@/lib/purchases';
+import { ENTITLEMENT_ID, OFFERING_ID, getRevenueCatApiKey, isRevenueCatAvailable } from '@/lib/purchases';
 import { readJSON, StorageKeys, writeJSON } from '@/lib/storage';
 
 type EntitlementContextValue = {
@@ -71,8 +71,9 @@ export function EntitlementProvider({ children }: PropsWithChildren) {
         }
         const Purchases = (await import('react-native-purchases')).default;
         const offerings = await Purchases.getOfferings();
-        const pkg = offerings.current?.availablePackages[0];
-        if (!pkg) throw new Error('No RevenueCat package available — check your Offerings config.');
+        const offering = offerings.all[OFFERING_ID] ?? offerings.current;
+        const pkg = offering?.availablePackages[0];
+        if (!pkg) throw new Error(`No RevenueCat package available in the "${OFFERING_ID}" offering — check your Offerings config.`);
         const { customerInfo } = await Purchases.purchasePackage(pkg);
         setIsUnlocked(Boolean(customerInfo.entitlements.active[ENTITLEMENT_ID]));
       },

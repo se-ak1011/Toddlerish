@@ -102,11 +102,14 @@ text-free per the brand brief.
 1. Create a project in the [RevenueCat dashboard](https://app.revenuecat.com)
    with an iOS app and an Android app.
 2. Create a single non-consumable/lifetime product in App Store Connect and
-   Google Play Console (e.g. `unlock_everything`), and attach both to an
-   **Offering** in RevenueCat with a default package.
-3. Create an **Entitlement** called `unlock_everything` (matches
-   `ENTITLEMENT_ID` in `lib/purchases.ts`) and attach both store products to
-   it.
+   Google Play Console, and attach both to an **Offering** in RevenueCat
+   identified exactly `Toddlerish_unlock` (matches `OFFERING_ID` in
+   `lib/purchases.ts`) with one package.
+3. Create an **Entitlement** identified exactly `Unlocked` — capital U,
+   matches `ENTITLEMENT_ID` in `lib/purchases.ts` — and attach both store
+   products to it. RevenueCat entitlement and offering identifiers are
+   case-sensitive strings, so a mismatched capital letter here is the
+   single most common reason "it unlocks nothing."
 4. Copy the iOS and Android **public** API keys from RevenueCat and expose
    them as `EXPO_PUBLIC_REVENUECAT_API_KEY_IOS` / `EXPO_PUBLIC_REVENUECAT_API_KEY_ANDROID`
    wherever the app gets built — Metro inlines any `EXPO_PUBLIC_*` var at

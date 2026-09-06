@@ -60,7 +60,7 @@ function RootLayoutNav() {
         headerStyle: { backgroundColor: colors.surface },
         headerTintColor: colors.text,
         headerTitleStyle: { color: colors.text },
-        headerBackTitle: '',
+        headerBackButtonDisplayMode: 'minimal',
         contentStyle: { backgroundColor: colors.bg },
       }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
